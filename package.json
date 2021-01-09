@@ -1,0 +1,23 @@
+{
+  "name": "gpxies_backend",
+  "version": "1.0.0",
+  "description": "Backend for Gpxies (codename for rsclone task) https://github.com/nikolai-minkevich/rsclone",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikolai-minkevich/gpxies_backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nikolai-minkevich/gpxies_backend/issues"
+  },
+  "homepage": "https://github.com/nikolai-minkevich/gpxies_backend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
