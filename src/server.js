@@ -23,6 +23,8 @@ app.use(`/api/v1/users`, userRouter);
 
 // 404 error
 app.all('*', (req, res, next) => {
+    // console.log("res", res);
+    // console.log("res", res);
     const err = new HttpException(404, 'Endpoint Not Found');
     next(err);
 });
@@ -33,5 +35,6 @@ app.use(errorMiddleware);
 // starting the server
 app.listen(port, () =>
     console.log(`🚀 Server running on port ${port}!`));
+
 
 module.exports = app;
