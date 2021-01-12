@@ -30,7 +30,7 @@ exports.createUserSchema = [
         .normalizeEmail(),
     check('role')
         .optional()
-        .isIn([Role.Admin, Role.SuperUser])
+        .isIn([Role.Admin, Role.User])
         .withMessage('Invalid Role type'),
     check('password')
         .exists()
@@ -74,7 +74,7 @@ exports.updateUserSchema = [
         .normalizeEmail(),
     check('role')
         .optional()
-        .isIn([Role.Admin, Role.SuperUser])
+        .isIn([Role.Admin, Role.User])
         .withMessage('Invalid Role type'),
     check('password')
         .optional()
