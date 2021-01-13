@@ -3,14 +3,14 @@
 +---------+------------------------------+--------------------------------+--------+
 | Users                                                                            |
 +---------+------------------------------+--------------------------------+--------+
-| Get     | /api/v1/users                | Get all users                  | User   |
-| Get     | /api/v1/users/id/:1          | Get user with id=1             | User   |
-| Get     | /api/v1/users/username/:ann  | Get user with username='ann'   | User   |
-| Get     | /api/v1/users/whoami         | Get the current user details   | User   |
-| Post    | /api/v1/users                | Create new user                |        |
-| Patch   | /api/v1/users/id/:1          | Update user with id=1          | Admin  |
-| Delete  | /api/v1/users/id/:1          | Delete user with id=1          | Admin  |
-| Post    | /api/v1/users/login          | Login with email and password  | Admin  |
+| Get     | /api/v1/users                | Get all users                  | User   |+
+| Get     | /api/v1/users/id/:1          | Get user with id=1             | User   |+
+| Get     | /api/v1/users/username/:ann  | Get user with username='ann'   | User   |+
+| Get     | /api/v1/users/whoami         | Get the current user details   | User   |+
+| Post    | /api/v1/users                | Create new user                |        |+
+| Patch   | /api/v1/users/id/:1          | Update user with id=1          | User   |+
+| Delete  | /api/v1/users/id/:1          | Delete user with id=1          | User   |+
+| Post    | /api/v1/users/login          | Login with email and password  |        |+
 +---------+------------------------------+--------------------------------+--------+
 | Tracks                                                                           |
 +---------+------------------------------+--------------------------------+--------+

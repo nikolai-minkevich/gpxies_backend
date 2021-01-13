@@ -20,8 +20,8 @@ app.options("*", cors());
 
 const port = Number(process.env.PORT || 3331);
 
-app.use(`/api/v1/users`, userRouter);
-app.use(`/api/v1/tracks`, trackRouter);
+app.use(`/users`, userRouter);
+app.use(`/tracks`, trackRouter);
 
 // 404 error
 app.all('*', (req, res, next) => {

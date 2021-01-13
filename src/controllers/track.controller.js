@@ -49,7 +49,8 @@ class TrackController {
             throw new HttpException(500, 'Something went wrong');
         }
 
-        res.status(201).send(req.body.hashString);
+        res.status(201).send({ ...req.body });
+
 
         // res.status(201).send(req.hashString);
     };
