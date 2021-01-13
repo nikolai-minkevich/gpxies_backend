@@ -40,7 +40,7 @@ class TrackController {
         this.checkValidation(req);
 
         await this.hashTitle(req);
-
+        // Get user id from req.currentUser 
         await this.addUserId(req);
 
         const result = await TrackModel.create(req.body);
@@ -49,7 +49,9 @@ class TrackController {
             throw new HttpException(500, 'Something went wrong');
         }
 
-        res.status(201).send('Track was created!');
+        res.status(201).send(req.body.hashString);
+
+        // res.status(201).send(req.hashString);
     };
 
     updateTrack = async (req, res, next) => {
@@ -89,11 +91,11 @@ class TrackController {
     // hash track title
     hashTitle = async (req) => {
         if (req.body.title) {
-            req.body.hashString = await md5(req.body.title + new Date().toISOString());
+            req.body.hashString = await md5(req.body.title + new Date().toISOString() + Math.random().toString());
         }
     }
 
-    // hash track title
+    // add user id
     addUserId = async (req) => {
         if (req.currentUser.id) {
             req.body.user = req.currentUser.id;
