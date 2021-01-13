@@ -1,61 +1,47 @@
-const UserModel = require('../models/user.model');
+const TrackModel = require('../models/track.model');
 const HttpException = require('../utils/HttpException.utils');
 const { validationResult } = require('express-validator');
-const bcrypt = require('bcryptjs');
+const md5 = require('md5');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
 /******************************************************************************
- *                              User Controller
+ *                              Track Controller
  ******************************************************************************/
-class UserController {
-    getAllUsers = async (req, res, next) => {
-        let userList = await UserModel.find();
-        if (!userList.length) {
-            throw new HttpException(404, 'Users not found');
+class TrackController {
+    getAllTracks = async (req, res, next) => {
+        let trackList = await UserModel.find();
+        if (!trackList.length) {
+            throw new HttpException(404, 'Tracks not found');
         }
 
-        userList = userList.map(user => {
-            const { password, ...userWithoutPassword } = user;
-            return userWithoutPassword;
-        });
-
-        res.send(userList);
+        res.send(trackList);
     };
 
-    getUserById = async (req, res, next) => {
-        const user = await UserModel.findOne({ id: req.params.id });
-        if (!user) {
-            throw new HttpException(404, 'User not found');
+    getTrackById = async (req, res, next) => {
+        const track = await TrackModel.findOne({ id: req.params.id });
+        if (!track) {
+            throw new HttpException(404, 'Track not found');
         }
 
-        const { password, ...userWithoutPassword } = user;
-
-        res.send(userWithoutPassword);
+        res.send(track);
     };
 
-    getUserByuserName = async (req, res, next) => {
-        const user = await UserModel.findOne({ username: req.params.username });
-        if (!user) {
-            throw new HttpException(404, 'User not found');
+    getTracksByUserId = async (req, res, next) => {
+        const track = await TrackModel.find({ user: req.params.user });
+        if (!track) {
+            throw new HttpException(404, 'Tracks not found');
         }
 
-        const { password, ...userWithoutPassword } = user;
-
-        res.send(userWithoutPassword);
+        res.send(track);
     };
 
-    getCurrentUser = async (req, res, next) => {
-        const { password, ...userWithoutPassword } = req.currentUser;
-
-        res.send(userWithoutPassword);
-    };
-
-    createUser = async (req, res, next) => {
+    createTrack = async (req, res, next) => {
+        // do not forget 
         this.checkValidation(req);
 
-        await this.hashPassword(req);
+        await this.hashTitle(req);
 
         const result = await UserModel.create(req.body);
 
@@ -63,7 +49,7 @@ class UserController {
             throw new HttpException(500, 'Something went wrong');
         }
 
-        res.status(201).send('User was created!');
+        res.status(201).send('Track was created!');
     };
 
     updateUser = async (req, res, next) => {
@@ -108,7 +94,7 @@ class UserController {
             throw new HttpException(401, 'Unable to login!');
         }
 
-        const isMatch = await bcrypt.compare(pass, user.password);
+       // const isMatch = await bcrypt.compare(pass, user.password);
 
         if (!isMatch) {
             throw new HttpException(401, 'Incorrect password!');
@@ -132,11 +118,11 @@ class UserController {
         }
     }
 
-    // hash password if it exists
-    hashPassword = async (req) => {
-        if (req.body.password) {
-            req.body.password = await bcrypt.hash(req.body.password, 8);
-        }
+    // hash track title
+    hashTitle = async (req) => {
+        if (req.body.title) {
+            req.body.hashString = await md5(req.body.title + new Date().toISOString());
+        } 
     }
 }
 
@@ -145,4 +131,4 @@ class UserController {
 /******************************************************************************
  *                               Export
  ******************************************************************************/
-module.exports = new UserController;
+module.exports = new TrackController;
