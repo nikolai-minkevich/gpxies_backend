@@ -44,10 +44,6 @@ exports.createUserSchema = [
         .exists()
         .custom((value, { req }) => value === req.body.password)
         .withMessage('confirm_password field must have the same value as the password field'),
-    check('age')
-        .optional()
-        .isNumeric()
-        .withMessage('Must be a number')
 ];
 
 exports.updateUserSchema = [
@@ -89,10 +85,6 @@ exports.updateUserSchema = [
         .optional()
         .custom((value, { req }) => value === req.body.password)
         .withMessage('confirm_password field must have the same value as the password field'),
-    check('age')
-        .optional()
-        .isNumeric()
-        .withMessage('Must be a number'),
     body()
         .custom(value => {
             return !!Object.keys(value).length;
@@ -100,7 +92,7 @@ exports.updateUserSchema = [
         .withMessage('Please provide required field to update')
         .custom(value => {
             const updates = Object.keys(value);
-            const allowUpdates = ['username', 'password', 'confirm_password', 'email', 'role', 'first_name', 'last_name', 'age'];
+            const allowUpdates = ['username', 'password', 'confirm_password', 'email', 'role', 'first_name', 'last_name'];
             return updates.every(update => allowUpdates.includes(update));
         })
         .withMessage('Invalid updates!')
