@@ -3,11 +3,11 @@ const Type = require('../../utils/trackTypes.utils');
 
 //    	user	hashString	title	type	distance	created
 exports.createTrackSchema = [
-    check('user')
-        .exists()
-        .withMessage('User id is required')
-        .isNumeric()
-        .withMessage('Must be a number'),
+    // check('user')
+    //     .exists()
+    //     .withMessage('User id is required')
+    //     .isNumeric()
+    //     .withMessage('Must be a number'),
     check('title')
         .exists()
         .withMessage('Title is required'),

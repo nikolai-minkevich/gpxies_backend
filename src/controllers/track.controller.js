@@ -37,11 +37,11 @@ class TrackController {
     };
 
     createTrack = async (req, res, next) => {
-        // do not forget 
-        //console.log(req);
         this.checkValidation(req);
 
         await this.hashTitle(req);
+
+        await this.addUserId(req);
 
         const result = await TrackModel.create(req.body);
 
@@ -90,8 +90,18 @@ class TrackController {
     hashTitle = async (req) => {
         if (req.body.title) {
             req.body.hashString = await md5(req.body.title + new Date().toISOString());
-        } 
+        }
     }
+
+    // hash track title
+    addUserId = async (req) => {
+        if (req.currentUser.id) {
+            req.body.user = req.currentUser.id;
+        } else {
+            throw new HttpException(401, 'Auth information is requied', errors);
+        }
+    }
+
 }
 
 
