@@ -2,7 +2,6 @@ const TrackModel = require('../models/track.model');
 const HttpException = require('../utils/HttpException.utils');
 const { validationResult } = require('express-validator');
 const md5 = require('md5');
-const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -43,7 +42,7 @@ class TrackController {
 
         await this.hashTitle(req);
 
-        const result = await UserModel.create(req.body);
+        const result = await TrackModel.create(req.body);
 
         if (!result) {
             throw new HttpException(500, 'Something went wrong');
@@ -52,16 +51,12 @@ class TrackController {
         res.status(201).send('Track was created!');
     };
 
-    updateUser = async (req, res, next) => {
+    updateTrack = async (req, res, next) => {
         this.checkValidation(req);
-
-        await this.hashPassword(req);
-
-        const { confirm_password, ...restOfUpdates } = req.body;
 
         // do the update query and get the result
         // it can be partial edit
-        const result = await UserModel.update(restOfUpdates, req.params.id);
+        const result = await TrackModel.update(restOfUpdates, req.params.id);
 
         if (!result) {
             throw new HttpException(404, 'Something went wrong');
@@ -75,40 +70,12 @@ class TrackController {
         res.send({ message, info });
     };
 
-    deleteUser = async (req, res, next) => {
-        const result = await UserModel.delete(req.params.id);
+    deleteTrack = async (req, res, next) => {
+        const result = await TrackModel.delete(req.params.id);
         if (!result) {
-            throw new HttpException(404, 'User not found');
+            throw new HttpException(404, 'Track not found');
         }
-        res.send('User has been deleted');
-    };
-
-    userLogin = async (req, res, next) => {
-        this.checkValidation(req);
-
-        const { email, password: pass } = req.body;
-
-        const user = await UserModel.findOne({ email });
-
-        if (!user) {
-            throw new HttpException(401, 'Unable to login!');
-        }
-
-       // const isMatch = await bcrypt.compare(pass, user.password);
-
-        if (!isMatch) {
-            throw new HttpException(401, 'Incorrect password!');
-        }
-
-        // user matched!
-        const secretKey = process.env.SECRET_JWT || "";
-        const token = jwt.sign({ user_id: user.id.toString() }, secretKey, {
-            expiresIn: '24h'
-        });
-
-        const { password, ...userWithoutPassword } = user;
-
-        res.send({ ...userWithoutPassword, token });
+        res.send('Track has been deleted');
     };
 
     checkValidation = (req) => {
