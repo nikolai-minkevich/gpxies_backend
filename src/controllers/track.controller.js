@@ -10,7 +10,7 @@ dotenv.config();
  ******************************************************************************/
 class TrackController {
     getAllTracks = async (req, res, next) => {
-        let trackList = await UserModel.find();
+        let trackList = await TrackModel.find();
         if (!trackList.length) {
             throw new HttpException(404, 'Tracks not found');
         }
@@ -38,6 +38,7 @@ class TrackController {
 
     createTrack = async (req, res, next) => {
         // do not forget 
+        //console.log(req);
         this.checkValidation(req);
 
         await this.hashTitle(req);

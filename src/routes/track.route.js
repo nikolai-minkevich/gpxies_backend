@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const trackController = require('../controllers/track.controller');
 const auth = require('../middleware/auth.middleware');
-const Type = require('../utils/trackTypes.utils');
 const awaitHandlerFactory = require('../middleware/awaitHandlerFactory.middleware');
 
 const { createTrackSchema, updateTrackSchema } = require('../middleware/validators/trackValidator.middleware');

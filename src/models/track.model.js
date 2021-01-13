@@ -1,6 +1,7 @@
 const query = require('../db/db-connection');
 const { multipleColumnSet } = require('../utils/common.utils');
 const Role = require('../utils/userRoles.utils');
+const Type = require('../utils/trackTypes.utils');
 class TrackModel {
     tableName = 'track';
 
@@ -29,7 +30,7 @@ class TrackModel {
         return result[0];
     }
     // 	id	user	hashString	title	type	distance	created
-    create = async ({ user, hashString, title, type, distance }) => {
+    create = async ({ user, hashString, title, type = Type.Other, distance = 0 }) => {
         const sql = `INSERT INTO ${this.tableName}
         (user, hashString, title, type, distance) VALUES (?,?,?,?,?)`;
 
