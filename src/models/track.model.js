@@ -1,8 +1,9 @@
 const query = require('../db/db-connection');
 const { multipleColumnSet } = require('../utils/common.utils');
 const Role = require('../utils/userRoles.utils');
-class UserModel {
-    tableName = 'user';
+const Type = require('../utils/trackTypes.utils');
+class TrackModel {
+    tableName = 'track';
 
     find = async (params = {}) => {
         let sql = `SELECT * FROM ${this.tableName}`;
@@ -25,15 +26,15 @@ class UserModel {
 
         const result = await query(sql, [...values]);
 
-        // return back the first row (user)
+        // return back the first row
         return result[0];
     }
-
-    create = async ({ username, password, first_name, last_name, email, role = Role.User, age }) => {
+    // 	id	user	hashString	title	type	distance	created
+    create = async ({ user, hashString, title, type = Type.Other, distance = 0 }) => {
         const sql = `INSERT INTO ${this.tableName}
-        (username, password, first_name, last_name, email, role, age) VALUES (?,?,?,?,?,?,?)`;
+        (user, hashString, title, type, distance) VALUES (?,?,?,?,?)`;
 
-        const result = await query(sql, [username, password, first_name, last_name, email, role, age]);
+        const result = await query(sql, [user, hashString, title, type, distance]);
         const affectedRows = result ? result.affectedRows : 0;
 
         return affectedRows;
@@ -42,7 +43,7 @@ class UserModel {
     update = async (params, id) => {
         const { columnSet, values } = multipleColumnSet(params)
 
-        const sql = `UPDATE user SET ${columnSet} WHERE id = ?`;
+        const sql = `UPDATE ${this.tableName} SET ${columnSet} WHERE id = ?`;
 
         const result = await query(sql, [...values, id]);
 
@@ -59,4 +60,4 @@ class UserModel {
     }
 }
 
-module.exports = new UserModel;
+module.exports = new TrackModel;
