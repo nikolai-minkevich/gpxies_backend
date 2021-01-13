@@ -38,9 +38,9 @@ class TrackController {
 
     createTrack = async (req, res, next) => {
         this.checkValidation(req);
-
+        // Generate unique identificator 'hashString'
         await this.hashTitle(req);
-        // Get user id from req.currentUser 
+        // Add user id in body from req.currentUser 
         await this.addUserId(req);
 
         const result = await TrackModel.create(req.body);
@@ -59,7 +59,7 @@ class TrackController {
 
         // do the update query and get the result
         // it can be partial edit
-        const result = await TrackModel.update(restOfUpdates, req.params.id);
+        const result = await TrackModel.update(req.body, req.params.id);
 
         if (!result) {
             throw new HttpException(404, 'Something went wrong');
