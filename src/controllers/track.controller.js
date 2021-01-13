@@ -50,9 +50,6 @@ class TrackController {
         }
 
         res.status(201).send({ ...req.body });
-
-
-        // res.status(201).send(req.hashString);
     };
 
     updateTrack = async (req, res, next) => {
