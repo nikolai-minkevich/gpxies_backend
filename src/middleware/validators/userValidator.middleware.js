@@ -5,60 +5,60 @@ const Role = require('../../utils/userRoles.utils');
 exports.createUserSchema = [
     check('username')
         .exists()
-        .withMessage('username is required')
+        .withMessage('Имя пользователя обязательно')
         .isLength({ min: 3 })
-        .withMessage('Must be at least 3 chars long'),
+        .withMessage('Минимальная длина &mdash; 3 символа')
+        .isAlphanumeric()
+        .withMessage('Допускаются только латинские буквы и цифры'),
     check('email')
         .exists()
-        .withMessage('Email is required')
+        .withMessage('Адрес почты обязателен')
         .isEmail()
-        .withMessage('Must be a valid email')
+        .withMessage('Введите корректный адрес')
         .normalizeEmail(),
     check('role')
         .optional()
         .isIn([Role.Admin, Role.User])
-        .withMessage('Invalid Role type'),
+        .withMessage('Неверная роль'),
     check('password')
         .exists()
-        .withMessage('Password is required')
+        .withMessage('Пароль обязателен')
         .notEmpty()
         .isLength({ min: 6 })
-        .withMessage('Password must contain at least 6 characters')
-        .isLength({ max: 10 })
-        .withMessage('Password can contain max 10 characters'),
+        .withMessage('Пароль должен содержать не менее 6 символов'),
     check('confirm_password')
         .exists()
         .custom((value, { req }) => value === req.body.password)
-        .withMessage('confirm_password field must have the same value as the password field'),
+        .withMessage('Пароли должны совпадать'),
 ];
 
 exports.updateUserSchema = [
     check('username')
         .optional()
         .isLength({ min: 3 })
-        .withMessage('Must be at least 3 chars long'),
+        .withMessage('Минимальная длина &mdash; 3 символа')
+        .isAlphanumeric()
+        .withMessage('Допускаются только латинские буквы и цифры'),
     check('email')
         .optional()
         .isEmail()
-        .withMessage('Must be a valid email')
+        .withMessage('Введите корректный адрес')
         .normalizeEmail(),
     check('role')
         .optional()
         .isIn([Role.Admin, Role.User])
-        .withMessage('Invalid Role type'),
+        .withMessage('Неверная роль'),
     check('password')
         .optional()
         .notEmpty()
         .isLength({ min: 6 })
-        .withMessage('Password must contain at least 6 characters')
-        .isLength({ max: 10 })
-        .withMessage('Password can contain max 10 characters')
+        .withMessage('Пароль должен содержать не менее 6 символов')
         .custom((value, { req }) => !!req.body.confirm_password)
-        .withMessage('Please confirm your password'),
+        .withMessage('Необходимо ввести подтверждение пароля'),
     check('confirm_password')
         .optional()
         .custom((value, { req }) => value === req.body.password)
-        .withMessage('confirm_password field must have the same value as the password field'),
+        .withMessage('Пароли должны совпадать'),
     body()
         .custom(value => {
             return !!Object.keys(value).length;
@@ -75,13 +75,13 @@ exports.updateUserSchema = [
 exports.validateLogin = [
     check('email')
         .exists()
-        .withMessage('Email is required')
+        .withMessage('Адрес почты обязателен')
         .isEmail()
-        .withMessage('Must be a valid email')
+        .withMessage('Введите корректный адрес')
         .normalizeEmail(),
     check('password')
         .exists()
-        .withMessage('Password is required')
+        .withMessage('Пароль обязателен')
         .notEmpty()
-        .withMessage('Password must be filled')
+        .withMessage('Пароль обязателен')
 ];

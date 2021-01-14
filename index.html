@@ -347,7 +347,46 @@
           </td>
         </tr>
 
+        <!-- Create -->
+        <tr>
+          <td>
+            POST
+          </td>
+          <td>
+            /tracks
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+                    <pre>{
+  "title":"Everning ride",
+  "distance":"100",
+  "type":"Bike"
+}</pre>
+                </code>
 
+
+          </td>
+          <td>
+            OK: 201, error: 4xx<br>
+            
+            <code>
+              <pre>{
+  "title":"Everning ride",
+  "distance":"100",
+  "type":"Bike",
+  "hashString":"f92ec30a223bb7ea"
+}</pre>
+            </code>
+            
+          </td>
+          <td>
+            Create track
+          </td>
+        </tr>
 
 
       </tbody>
