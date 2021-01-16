@@ -11,10 +11,23 @@
 </head>
 
 <body>
-  <div class="">
-    <h2>Welcome to GPXIES.RU API!</h2>
+  <style>
+    .page-content {
+      padding: 10px;
+    }
+  </style>
+
+  <div class="page-content">
+    <h2>GPXIES.RU API Reference</h2>
     <p>
-      Root url is <a href="https://api.gpxies.ru">https://api.gpxies.ru</a>.
+      Root URL is <code><strong>https://api.gpxies.ru</strong></code>
+    </p>
+    <p>In order to avoid blocking you must include the following headers:<br>
+      <code> <strong>User-agent</strong>: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36<br>
+<strong>Referer</strong>: https://api.gpxies.ru</code>
+    </p>
+    <p>
+      Chapters: <a href="#users">Users</a>, <a href="#tracks">Tracks</a>
     </p>
 
     <table class="table">
@@ -43,7 +56,7 @@
       <tbody>
         <tr class="thead-light">
           <th scope="rowgroup" colspan="6">
-            Users
+            <a name="users">Users</a>
           </th>
         </tr>
         <!-- Create -->
@@ -153,7 +166,7 @@
             GET
           </td>
           <td>
-            /users/id/:1
+            /users/id/<em>1</em>
           </td>
           <td>
             Authorization: Bearer {token}
@@ -185,7 +198,7 @@
             GET
           </td>
           <td>
-            /users/username/:popov
+            /users/username/<em>popov</em>
           </td>
           <td>
             Authorization: Bearer {token}
@@ -250,7 +263,8 @@
             PATCH
           </td>
           <td>
-            /users/id/:1
+            /users/id/<em>1</em>
+            <br><strong>NOT WORKING NOW: NEED TO ADD CHECK</strong>
           </td>
           <td>
             Authorization: Bearer {token}<br>
@@ -266,9 +280,11 @@
             OK: 200, error: 4XX<br>
             <code>
                     <pre>{
-  "message": "Updated faild",
-  "info": "Rows matched: 
-      1 Changed: 0 Warnings: 0"
+  "message": 
+    "User updated successfully",
+  "info": 
+    "Rows matched: 
+      1 Changed: 1 Warnings: 0"
 }</pre>
                 </code>
 
@@ -283,7 +299,8 @@
             DELETE
           </td>
           <td>
-            /users/id/:1
+            /users/id/<em>1</em>
+            <br><strong>NOT WORKING NOW: NEED TO ADD CHECK</strong>
           </td>
           <td>
             Authorization: Bearer {token}<br>
@@ -301,9 +318,10 @@
           </td>
         </tr>
         <!-- TRACKS -->
+
         <tr class="thead-light">
           <th scope="rowgroup" colspan="6">
-            Tracks
+            <a name="tracks">Tracks</a>
           </th>
         </tr>
         <!-- Create -->
@@ -331,7 +349,7 @@
           </td>
           <td>
             OK: 201, error: 4xx<br>
-            
+
             <code>
               <pre>{
   "title":"Everning ride",
@@ -340,17 +358,61 @@
   "hashString":"f92ec30a223bb7ea"
 }</pre>
             </code>
-            
+
           </td>
           <td>
             Create track
           </td>
         </tr>
 
-        <!-- Create -->
+
+        <!-- Upload -->
         <tr>
           <td>
             POST
+          </td>
+          <td>
+            /tracks/upload
+            <br><strong>NOT WORKING NOW: NEED TO ADD CHECK</strong>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+                            <pre>{
+  "title":"Everning ride",
+  "distance":"100",
+  "type":"Bike"
+  + BLOB
+}</pre>
+                        </code>
+
+
+          </td>
+          <td>
+            OK: 201, error: 4xx<br>
+
+            <code>
+                      <pre>{
+  "title":"Everning ride",
+  "distance":"100",
+  "type":"Bike",
+  "hashString":"f92ec30a223bb7ea"
+}</pre>
+                    </code>
+
+          </td>
+          <td>
+            Upload track
+          </td>
+        </tr>
+
+        <!-- Get all -->
+        <tr>
+          <td>
+            GET
           </td>
           <td>
             /tracks
@@ -361,32 +423,218 @@
           </td>
           <td>
             <code>
-                    <pre>{
-  "title":"Everning ride",
-  "distance":"100",
-  "type":"Bike"
-}</pre>
+                    <pre>[
+  {
+    "id": 1,
+    "user": 1,
+    "hashString": "b03c42512",
+    "title": "Lunch ride",
+    "type": "Ride",
+    "distance": 100,
+    "created": 
+      "2021-01-14T20:41:16.000Z"
+  }
+]</pre>
                 </code>
-
-
           </td>
           <td>
             OK: 201, error: 4xx<br>
-            
+
             <code>
-              <pre>{
-  "title":"Everning ride",
-  "distance":"100",
-  "type":"Bike",
-  "hashString":"f92ec30a223bb7ea"
-}</pre>
+              <pre></pre>
             </code>
-            
+
           </td>
           <td>
-            Create track
+            Get all tracks
           </td>
         </tr>
+        <!-- Get tracks by track ID -->
+        <tr>
+          <td>
+            GET
+          </td>
+          <td>
+            /tracks/id/<em>1</em>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+                    <pre>{
+  "id": 1,
+  "user": 1,
+  "hashString": "b03c42512",
+  "title": "Lunch ride",
+  "type": "Ride",
+  "distance": 100,
+  "created": 
+    "2021-01-14T20:41:16.000Z"
+}</pre>
+                </code>
+          </td>
+          <td>
+            OK: 201, error: 4xx<br>
+
+            <code>
+              <pre></pre>
+            </code>
+
+          </td>
+          <td>
+            Get tracks with id=1
+          </td>
+        </tr>
+        <!-- Get tracks by username -->
+        <tr>
+          <td>
+            GET
+          </td>
+          <td>
+            /tracks/username/<em>popov</em>
+            <br><strong>NOT WORKING NOW: NEED TO ADD CHECK</strong>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+                    <pre>[
+  {
+    "id": 1,
+    "user": 1,
+    "hashString": "b03c42512",
+    "title": "Lunch ride",
+    "type": "Ride",
+    "distance": 100,
+    "created": 
+      "2021-01-14T20:41:16.000Z"
+  }
+]</pre>
+                </code>
+          </td>
+          <td>
+            OK: 201, error: 4xx<br>
+
+            <code>
+              <pre></pre>
+            </code>
+
+          </td>
+          <td>
+            Get tracks with id=1
+          </td>
+        </tr>
+
+        <!-- Get tracks by track hash -->
+        <tr>
+          <td>
+            GET
+          </td>
+          <td>
+            /tracks/<em>b03c42512</em>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+              <pre>{
+  "id": 1,
+  "user": 1,
+  "hashString": "b03c42512",
+  "title": "Lunch ride",
+  "type": "Ride",
+  "distance": 100,
+  "created": 
+  "2021-01-14T20:41:16.000Z"
+}</pre>
+          </code>
+          </td>
+          <td>
+            OK: 201, error: 4xx<br>
+
+            <code>
+        <pre></pre>
+      </code>
+
+          </td>
+          <td>
+            Get tracks with<br> hash=b03c42512
+          </td>
+        </tr>
+
+        <!-- Update track -->
+        <tr>
+          <td>
+            PATCH
+          </td>
+          <td>
+            /tracks/id/<em>1</em>
+            <br><strong>NOT WORKING NOW: NEED TO ADD CHECK</strong>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code><pre>{
+  "title":"New title"
+}</pre>
+</code>
+          </td>
+          <td>
+            OK: 200, error: 4XX<br>
+            <code>
+            <pre>{
+  "message": 
+    "Track updated successfully",
+  "info": 
+    "Rows matched: 
+      1 Changed: 1 Warnings: 0"
+}</pre>
+        </code>
+
+          </td>
+          <td>
+            Update track with id=1
+          </td>
+        </tr>
+        <!-- Delete track -->
+        <tr>
+          <td>
+            DELETE
+          </td>
+          <td>
+            /tracks/id/<em>1</em>
+            <br><strong>NOT WORKING NOW: NEED TO ADD CHECK</strong>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+</code>
+          </td>
+          <td>
+            OK: 200, error: 4XX
+          </td>
+          <td>
+            Delete user with id=1
+          </td>
+        </tr>
+
+
+
+
+
+
+
 
 
       </tbody>

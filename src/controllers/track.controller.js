@@ -102,6 +102,11 @@ class TrackController {
         }
     }
 
+    // Todo Add check user 
+    // checkUserId = async (req) => {
+    //     if (req.currentUser.id)
+    // }
+
 }
 
 
