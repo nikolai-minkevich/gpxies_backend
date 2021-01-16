@@ -1,7 +1,11 @@
+RewriteEngine on
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
+
 SetEnv GHOST_NODE_VERSION_CHECK false
 PassengerStartupFile server.js
 PassengerResolveSymlinksInDocumentRoot on
 Require all granted
 PassengerAppType node
 PassengerAppRoot /home/a0466680/domains/api.gpxies.ru/src
-Options -MultiViews 
+Options -MultiViews
