@@ -5,12 +5,12 @@ const HttpException = require('./utils/HttpException.utils');
 const errorMiddleware = require('./middleware/error.middleware');
 const userRouter = require('./routes/user.route');
 const trackRouter = require('./routes/track.route');
-const path = require("path");
+const path = require('path');
 
 // Init express
 const app = express();
 // Init environment
-dotenv.config({ path: path.join(__dirname,'/../.env')})
+dotenv.config({ path: __dirname + '/../.env'});
 // parse requests of content-type: application/json
 // parses incoming requests with JSON payloads
 app.use(express.json());

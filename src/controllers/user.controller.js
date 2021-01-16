@@ -3,8 +3,9 @@ const HttpException = require('../utils/HttpException.utils');
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 const dotenv = require('dotenv');
-dotenv.config();
+dotenv.config({ path: __dirname + '/../../.env' });
 
 /******************************************************************************
  *                              User Controller
@@ -63,7 +64,7 @@ class UserController {
             throw new HttpException(500, 'Something went wrong');
         }
 
-        res.status(201).send(JSON.stringify({ok:'true',message:'User was created!'}));
+        res.status(201).send(JSON.stringify({ ok: 'true', message: 'User was created!' }));
     };
 
     updateUser = async (req, res, next) => {

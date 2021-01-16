@@ -2,8 +2,9 @@ const TrackModel = require('../models/track.model');
 const HttpException = require('../utils/HttpException.utils');
 const { validationResult } = require('express-validator');
 const md5 = require('md5');
+const path = require('path');
 const dotenv = require('dotenv');
-dotenv.config();
+dotenv.config({ path: __dirname + '/../../.env'});
 
 /******************************************************************************
  *                              Track Controller

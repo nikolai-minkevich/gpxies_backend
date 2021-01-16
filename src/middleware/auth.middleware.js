@@ -1,8 +1,10 @@
 const HttpException = require('../utils/HttpException.utils');
 const UserModel = require('../models/user.model');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 const dotenv = require('dotenv');
-dotenv.config({ path: path.join(__dirname,'/../../.env')})
+
+dotenv.config({ path: __dirname + '/../../.env'});
 
 const auth = (...roles) => {
     return async function (req, res, next) {
