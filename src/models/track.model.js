@@ -31,11 +31,11 @@ class TrackModel {
         return result[0];
     }
     // 	id	user	hashString	title	type	distance	created
-    create = async ({ user, hashString, title, type = Type.Other, distance = 0 }) => {
+    create = async ({ user, hashString, title, type = Type.Other, distance = 0, description = '', private = false }) => {
         const sql = `INSERT INTO ${this.tableName}
-        (user, hashString, title, type, distance) VALUES (?,?,?,?,?)`;
+        (user, hashString, title, type, distance, description, private ) VALUES (?,?,?,?,?,?,?)`;
 
-        const result = await query(sql, [user, hashString, title, type, distance]);
+        const result = await query(sql, [user, hashString, title, type, distance, description, private]);
         const affectedRows = result ? result.affectedRows : 0;
 
         return affectedRows;
