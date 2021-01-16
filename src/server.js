@@ -17,6 +17,8 @@ app.use(express.json());
 app.use(cors());
 // Enable pre-flight
 app.options("*", cors());
+// Add static files
+app.use(express.static('../public'));
 
 const port = Number(process.env.PORT || 3331);
 
