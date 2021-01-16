@@ -1,6 +1,6 @@
 const query = require('../db/db-connection');
 const { multipleColumnSet } = require('../utils/common.utils');
-const Role = require('../utils/userRoles.utils');
+//const Role = require('../utils/userRoles.utils');
 const Type = require('../utils/trackTypes.utils');
 
 class TrackModel {
