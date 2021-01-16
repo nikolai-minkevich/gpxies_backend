@@ -1,15 +1,28 @@
 const dotenv = require('dotenv');
-dotenv.config();
+dotenv.config({ path: __dirname + '/../../.env' })
 const mysql2 = require('mysql2');
 
 class DBConnection {
     constructor() {
-        this.db = mysql2.createPool({
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASS,
-            database: process.env.DB_DATABASE
-        });
+        if (process.env.NODE_ENV == 'development') {
+            this.db = mysql2.createPool({
+                host: process.env.DB_HOST,
+                //socketPath: '/tmp/mysql.sock',
+                user: process.env.DB_USER,
+                password: process.env.DB_PASS,
+                database: process.env.DB_DATABASE
+            });
+        }
+        if (process.env.NODE_ENV == 'production') {
+            this.db = mysql2.createPool({
+                //host: process.env.DB_HOST,
+                socketPath: '/tmp/mysql.sock',
+                user: process.env.DB_USER,
+                password: process.env.DB_PASS,
+                database: process.env.DB_DATABASE
+            });
+        }
+
 
         this.checkConnection();
     }

@@ -1,6 +1,7 @@
 const query = require('../db/db-connection');
 const { multipleColumnSet } = require('../utils/common.utils');
 const Role = require('../utils/userRoles.utils');
+
 class UserModel {
     tableName = 'user';
 
@@ -29,11 +30,11 @@ class UserModel {
         return result[0];
     }
 
-    create = async ({ username, password, first_name, last_name, email, role = Role.User}) => {
+    create = async ({ username, password, email, role = Role.User}) => {
         const sql = `INSERT INTO ${this.tableName}
-        (username, password, first_name, last_name, email, role) VALUES (?,?,?,?,?,?)`;
+        (username, password, email, role) VALUES (?,?,?,?)`;
 
-        const result = await query(sql, [username, password, first_name, last_name, email, role]);
+        const result = await query(sql, [username, password, email, role]);
         const affectedRows = result ? result.affectedRows : 0;
 
         return affectedRows;

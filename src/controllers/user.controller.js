@@ -63,7 +63,7 @@ class UserController {
             throw new HttpException(500, 'Something went wrong');
         }
 
-        res.status(201).send('User was created!');
+        res.status(201).send(JSON.stringify({ok:'true',message:'User was created!'}));
     };
 
     updateUser = async (req, res, next) => {

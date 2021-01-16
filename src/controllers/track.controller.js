@@ -49,9 +49,7 @@ class TrackController {
             throw new HttpException(500, 'Something went wrong');
         }
 
-        res.status(201).send(req.body.hashString);
-
-        // res.status(201).send(req.hashString);
+        res.status(201).send({ ...req.body });
     };
 
     updateTrack = async (req, res, next) => {
@@ -103,6 +101,11 @@ class TrackController {
             throw new HttpException(401, 'Auth information is requied', errors);
         }
     }
+
+    // Todo Add check user 
+    // checkUserId = async (req) => {
+    //     if (req.currentUser.id)
+    // }
 
 }
 

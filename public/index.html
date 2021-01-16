@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gpxies.ru API</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+</head>
+
+<body>
+  <style>
+    .page-content {
+      padding: 10px;
+    }
+  </style>
+
+  <div class="page-content">
+    <h2>GPXIES.RU API Reference</h2>
+    <p>
+      Root URL is <code><strong>https://api.gpxies.ru</strong></code>
+    </p>
+    <p>In order to avoid blocking you must include the following headers:<br>
+      <code> <strong>User-agent</strong>: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36<br>
+<strong>Referer</strong>: https://api.gpxies.ru</code>
+    </p>
+    <p>
+      Chapters: <a href="#users">Users</a>, <a href="#tracks">Tracks</a>
+    </p>
+
+    <table class="table">
+      <thead>
+        <tr class="thead-dark">
+          <th scope="col">
+            Type
+          </th>
+          <th scope="col">
+            URL
+          </th>
+          <th scope="col">
+            Headers
+          </th>
+          <th scope="col">
+            Request body
+          </th>
+          <th scope="col">
+            Response
+          </th>
+          <th scope="col">
+            Description
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="thead-light">
+          <th scope="rowgroup" colspan="6">
+            <a name="users">Users</a>
+          </th>
+        </tr>
+        <!-- Create -->
+        <tr>
+          <td>
+            POST
+          </td>
+          <td>
+            /users
+          </td>
+          <td>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+                            <pre>{
+  "username":"popov",
+  "email":"popov@yandex.ru",
+  "password":"pass2021",
+  "confirm_password":"pass2021"
+}</pre>
+                        </code>
+
+
+          </td>
+          <td>
+            OK: 201, error: 4xx
+          </td>
+          <td>
+            Create user
+          </td>
+        </tr>
+        <!-- Login -->
+        <tr>
+          <td>
+            POST
+          </td>
+          <td>
+            /users/login
+          </td>
+          <td>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+                            <pre>{
+  "email":"popov@yandex.ru",
+  "password":"pass2021"
+}</pre>
+                        </code>
+          </td>
+          <td>
+            OK: 201, error: 401<br>
+            <code>
+                            <pre>{
+  "id": 1,
+  "username": "popov",
+  "email": "popov@yandex.ru",
+  "role": "User",
+  "token": "eyJhbGciOiJ..."
+}</pre>
+                        </code>
+
+          </td>
+          <td>
+            Login
+          </td>
+        </tr>
+        <!-- Get all -->
+        <tr>
+          <td>
+            GET
+          </td>
+          <td>
+            /users
+          </td>
+          <td>
+            Authorization: Bearer {token}
+          </td>
+          <td>
+            <code>
+
+            </code>
+          </td>
+          <td>
+            OK: 200, error: 4XX<br>
+            <code>
+                            <pre>[
+  {
+    "id": 1,
+    "username": "popov",
+    "email": "popov@yandex.ru",
+    "role": "User"
+  }
+]</pre>
+                        </code>
+
+          </td>
+          <td>
+            Get all users
+          </td>
+        </tr>
+
+        <!-- Get user with id-->
+        <tr>
+          <td>
+            GET
+          </td>
+          <td>
+            /users/id/<em>1</em>
+          </td>
+          <td>
+            Authorization: Bearer {token}
+          </td>
+          <td>
+            <code>
+
+    </code>
+          </td>
+          <td>
+            OK: 200, error: 4XX<br>
+            <code>
+                    <pre>{
+  "id": 1,
+  "username": "popov",
+  "email": "popov@yandex.ru",
+  "role": "User"
+}</pre>
+                </code>
+
+          </td>
+          <td>
+            Get user with id=1
+          </td>
+        </tr>
+        <!-- Get user with name -->
+        <tr>
+          <td>
+            GET
+          </td>
+          <td>
+            /users/username/<em>popov</em>
+          </td>
+          <td>
+            Authorization: Bearer {token}
+          </td>
+          <td>
+            <code>
+
+    </code>
+          </td>
+          <td>
+            OK: 200, error: 4XX<br>
+            <code>
+                    <pre>{
+  "id": 1,
+  "username": "popov",
+  "email": "popov@yandex.ru",
+  "role": "User"
+}</pre>
+                </code>
+
+          </td>
+          <td>
+            Get user with username=popov
+          </td>
+        </tr>
+
+        <!-- Get whoami-->
+        <tr>
+          <td>
+            GET
+          </td>
+          <td>
+            /users/whoami
+          </td>
+          <td>
+            Authorization: Bearer {token}
+          </td>
+          <td>
+            <code>
+
+    </code>
+          </td>
+          <td>
+            OK: 200, error: 4XX<br>
+            <code>
+                    <pre>{
+  "id": 1,
+  "username": "popov",
+  "email": "popov@yandex.ru",
+  "role": "User"
+}</pre>
+                </code>
+
+          </td>
+          <td>
+            Get the current user details
+          </td>
+        </tr>
+        <!-- Update user -->
+        <tr>
+          <td>
+            PATCH
+          </td>
+          <td>
+            /users/id/<em>1</em>
+            <br><strong>NOT WORKING NOW: NEED TO ADD CHECK</strong>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code><pre>{
+  "role":"Admin"
+}</pre>
+    </code>
+          </td>
+          <td>
+            OK: 200, error: 4XX<br>
+            <code>
+                    <pre>{
+  "message": 
+    "User updated successfully",
+  "info": 
+    "Rows matched: 
+      1 Changed: 1 Warnings: 0"
+}</pre>
+                </code>
+
+          </td>
+          <td>
+            Update user with id=1
+          </td>
+        </tr>
+        <!-- Delete user -->
+        <tr>
+          <td>
+            DELETE
+          </td>
+          <td>
+            /users/id/<em>1</em>
+            <br><strong>NOT WORKING NOW: NEED TO ADD CHECK</strong>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+    </code>
+          </td>
+          <td>
+            OK: 200, error: 4XX
+          </td>
+          <td>
+            Delete user with id=1
+          </td>
+        </tr>
+        <!-- TRACKS -->
+
+        <tr class="thead-light">
+          <th scope="rowgroup" colspan="6">
+            <a name="tracks">Tracks</a>
+          </th>
+        </tr>
+        <!-- Create -->
+        <tr>
+          <td>
+            POST
+          </td>
+          <td>
+            /tracks
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+                    <pre>{
+  "title":"Everning ride",
+  "distance":"100",
+  "type":"Bike"
+}</pre>
+                </code>
+
+
+          </td>
+          <td>
+            OK: 201, error: 4xx<br>
+
+            <code>
+              <pre>{
+  "title":"Everning ride",
+  "distance":"100",
+  "type":"Bike",
+  "hashString":"f92ec30a223bb7ea"
+}</pre>
+            </code>
+
+          </td>
+          <td>
+            Create track
+          </td>
+        </tr>
+
+
+        <!-- Upload -->
+        <tr>
+          <td>
+            POST
+          </td>
+          <td>
+            /tracks/upload
+            <br><strong>NOT WORKING NOW: NEED TO ADD CHECK</strong>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+                            <pre>{
+  "title":"Everning ride",
+  "distance":"100",
+  "type":"Bike"
+  + BLOB
+}</pre>
+                        </code>
+
+
+          </td>
+          <td>
+            OK: 201, error: 4xx<br>
+
+            <code>
+                      <pre>{
+  "title":"Everning ride",
+  "distance":"100",
+  "type":"Bike",
+  "hashString":"f92ec30a223bb7ea"
+}</pre>
+                    </code>
+
+          </td>
+          <td>
+            Upload track
+          </td>
+        </tr>
+
+        <!-- Get all -->
+        <tr>
+          <td>
+            GET
+          </td>
+          <td>
+            /tracks
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+                    <pre>[
+  {
+    "id": 1,
+    "user": 1,
+    "hashString": "b03c42512",
+    "title": "Lunch ride",
+    "type": "Ride",
+    "distance": 100,
+    "created": 
+      "2021-01-14T20:41:16.000Z"
+  }
+]</pre>
+                </code>
+          </td>
+          <td>
+            OK: 201, error: 4xx<br>
+
+            <code>
+              <pre></pre>
+            </code>
+
+          </td>
+          <td>
+            Get all tracks
+          </td>
+        </tr>
+        <!-- Get tracks by track ID -->
+        <tr>
+          <td>
+            GET
+          </td>
+          <td>
+            /tracks/id/<em>1</em>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+                    <pre>{
+  "id": 1,
+  "user": 1,
+  "hashString": "b03c42512",
+  "title": "Lunch ride",
+  "type": "Ride",
+  "distance": 100,
+  "created": 
+    "2021-01-14T20:41:16.000Z"
+}</pre>
+                </code>
+          </td>
+          <td>
+            OK: 201, error: 4xx<br>
+
+            <code>
+              <pre></pre>
+            </code>
+
+          </td>
+          <td>
+            Get tracks with id=1
+          </td>
+        </tr>
+        <!-- Get tracks by username -->
+        <tr>
+          <td>
+            GET
+          </td>
+          <td>
+            /tracks/username/<em>popov</em>
+            <br><strong>NOT WORKING NOW: NEED TO ADD CHECK</strong>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+                    <pre>[
+  {
+    "id": 1,
+    "user": 1,
+    "hashString": "b03c42512",
+    "title": "Lunch ride",
+    "type": "Ride",
+    "distance": 100,
+    "created": 
+      "2021-01-14T20:41:16.000Z"
+  }
+]</pre>
+                </code>
+          </td>
+          <td>
+            OK: 201, error: 4xx<br>
+
+            <code>
+              <pre></pre>
+            </code>
+
+          </td>
+          <td>
+            Get tracks with id=1
+          </td>
+        </tr>
+
+        <!-- Get tracks by track hash -->
+        <tr>
+          <td>
+            GET
+          </td>
+          <td>
+            /tracks/<em>b03c42512</em>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+              <pre>{
+  "id": 1,
+  "user": 1,
+  "hashString": "b03c42512",
+  "title": "Lunch ride",
+  "type": "Ride",
+  "distance": 100,
+  "created": 
+  "2021-01-14T20:41:16.000Z"
+}</pre>
+          </code>
+          </td>
+          <td>
+            OK: 201, error: 4xx<br>
+
+            <code>
+        <pre></pre>
+      </code>
+
+          </td>
+          <td>
+            Get tracks with<br> hash=b03c42512
+          </td>
+        </tr>
+
+        <!-- Update track -->
+        <tr>
+          <td>
+            PATCH
+          </td>
+          <td>
+            /tracks/id/<em>1</em>
+            <br><strong>NOT WORKING NOW: NEED TO ADD CHECK</strong>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code><pre>{
+  "title":"New title"
+}</pre>
+</code>
+          </td>
+          <td>
+            OK: 200, error: 4XX<br>
+            <code>
+            <pre>{
+  "message": 
+    "Track updated successfully",
+  "info": 
+    "Rows matched: 
+      1 Changed: 1 Warnings: 0"
+}</pre>
+        </code>
+
+          </td>
+          <td>
+            Update track with id=1
+          </td>
+        </tr>
+        <!-- Delete track -->
+        <tr>
+          <td>
+            DELETE
+          </td>
+          <td>
+            /tracks/id/<em>1</em>
+            <br><strong>NOT WORKING NOW: NEED TO ADD CHECK</strong>
+          </td>
+          <td>
+            Authorization: Bearer {token}<br>
+            Content-Type: application/json
+          </td>
+          <td>
+            <code>
+</code>
+          </td>
+          <td>
+            OK: 200, error: 4XX
+          </td>
+          <td>
+            Delete user with id=1
+          </td>
+        </tr>
+
+
+
+
+
+
+
+
+
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>
