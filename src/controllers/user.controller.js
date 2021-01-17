@@ -11,134 +11,134 @@ dotenv.config({ path: __dirname + '/../../.env' });
  *                              User Controller
  ******************************************************************************/
 class UserController {
-    getAllUsers = async (req, res, next) => {
-        let userList = await UserModel.find();
-        if (!userList.length) {
-            throw new HttpException(404, 'Users not found');
-        }
+	getAllUsers = async (req, res, next) => {
+		let userList = await UserModel.find();
+		if (!userList.length) {
+			throw new HttpException(404, 'Users not found');
+		}
 
-        userList = userList.map(user => {
-            const { password, ...userWithoutPassword } = user;
-            return userWithoutPassword;
-        });
+		userList = userList.map(user => {
+			const { password, ...userWithoutPassword } = user;
+			return userWithoutPassword;
+		});
 
-        res.send(userList);
-    };
+		res.send(userList);
+	};
 
-    getUserById = async (req, res, next) => {
-        const user = await UserModel.findOne({ id: req.params.id });
-        if (!user) {
-            throw new HttpException(404, 'User not found');
-        }
+	getUserById = async (req, res, next) => {
+		const user = await UserModel.findOne({ id: req.params.id });
+		if (!user) {
+			throw new HttpException(404, 'User not found');
+		}
 
-        const { password, ...userWithoutPassword } = user;
+		const { password, ...userWithoutPassword } = user;
 
-        res.send(userWithoutPassword);
-    };
+		res.send(userWithoutPassword);
+	};
 
-    getUserByuserName = async (req, res, next) => {
-        const user = await UserModel.findOne({ username: req.params.username });
-        if (!user) {
-            throw new HttpException(404, 'User not found');
-        }
+	getUserByuserName = async (req, res, next) => {
+		const user = await UserModel.findOne({ username: req.params.username });
+		if (!user) {
+			throw new HttpException(404, 'User not found');
+		}
 
-        const { password, ...userWithoutPassword } = user;
+		const { password, ...userWithoutPassword } = user;
 
-        res.send(userWithoutPassword);
-    };
+		res.send(userWithoutPassword);
+	};
 
-    getCurrentUser = async (req, res, next) => {
-        const { password, ...userWithoutPassword } = req.currentUser;
+	getCurrentUser = async (req, res, next) => {
+		const { password, ...userWithoutPassword } = req.currentUser;
 
-        res.send(userWithoutPassword);
-    };
+		res.send(userWithoutPassword);
+	};
 
-    createUser = async (req, res, next) => {
-        this.checkValidation(req);
+	createUser = async (req, res, next) => {
+		this.checkValidation(req);
 
-        await this.hashPassword(req);
+		await this.hashPassword(req);
 
-        const result = await UserModel.create(req.body);
+		const result = await UserModel.create(req.body);
 
-        if (!result) {
-            throw new HttpException(500, 'Something went wrong');
-        }
+		if (!result) {
+			throw new HttpException(500, 'Something went wrong');
+		}
 
-        res.status(201).send(JSON.stringify({ ok: 'true', message: 'User was created!' }));
-    };
+		res.status(201).send(JSON.stringify({ ok: 'true', message: 'User was created!' }));
+	};
 
-    updateUser = async (req, res, next) => {
-        this.checkValidation(req);
+	updateUser = async (req, res, next) => {
+		this.checkValidation(req);
 
-        await this.hashPassword(req);
+		await this.hashPassword(req);
 
-        const { confirm_password, ...restOfUpdates } = req.body;
+		const { confirm_password, ...restOfUpdates } = req.body;
 
-        // do the update query and get the result
-        // it can be partial edit
-        const result = await UserModel.update(restOfUpdates, req.params.id);
+		// do the update query and get the result
+		// it can be partial edit
+		const result = await UserModel.update(restOfUpdates, req.params.id);
 
-        if (!result) {
-            throw new HttpException(404, 'Something went wrong');
-        }
+		if (!result) {
+			throw new HttpException(404, 'Something went wrong');
+		}
 
-        const { affectedRows, changedRows, info } = result;
+		const { affectedRows, changedRows, info } = result;
 
-        const message = !affectedRows ? 'User not found' :
-            affectedRows && changedRows ? 'User updated successfully' : 'Updated faild';
+		const message = !affectedRows ? 'User not found' :
+			affectedRows && changedRows ? 'User updated successfully' : 'Updated faild';
 
-        res.send({ message, info });
-    };
+		res.send({ message, info });
+	};
 
-    deleteUser = async (req, res, next) => {
-        const result = await UserModel.delete(req.params.id);
-        if (!result) {
-            throw new HttpException(404, 'User not found');
-        }
-        res.send('User has been deleted');
-    };
+	deleteUser = async (req, res, next) => {
+		const result = await UserModel.delete(req.params.id);
+		if (!result) {
+			throw new HttpException(404, 'User not found');
+		}
+		res.send('User has been deleted');
+	};
 
-    userLogin = async (req, res, next) => {
-        this.checkValidation(req);
+	userLogin = async (req, res, next) => {
+		this.checkValidation(req);
 
-        const { email, password: pass } = req.body;
+		const { email, password: pass } = req.body;
 
-        const user = await UserModel.findOne({ email });
+		const user = await UserModel.findOne({ email });
 
-        if (!user) {
-            throw new HttpException(401, 'Unable to login!');
-        }
+		if (!user) {
+			throw new HttpException(401, 'Unable to login!');
+		}
 
-        const isMatch = await bcrypt.compare(pass, user.password);
+		const isMatch = await bcrypt.compare(pass, user.password);
 
-        if (!isMatch) {
-            throw new HttpException(401, 'Incorrect password!');
-        }
+		if (!isMatch) {
+			throw new HttpException(401, 'Incorrect password!');
+		}
 
-        // user matched!
-        const secretKey = process.env.SECRET_JWT || "";
-        const token = jwt.sign({ user_id: user.id.toString() }, secretKey, {
-            expiresIn: '24h'
-        });
+		// user matched!
+		const secretKey = process.env.SECRET_JWT || "";
+		const token = jwt.sign({ user_id: user.id.toString() }, secretKey, {
+			expiresIn: '24h'
+		});
 
-        const { password, ...userWithoutPassword } = user;
+		const { password, ...userWithoutPassword } = user;
 
-        res.send({ ...userWithoutPassword, token });
-    };
+		res.send({ ...userWithoutPassword, token });
+	};
 
-    checkValidation = (req) => {
-        const errors = validationResult(req)
-        if (!errors.isEmpty()) {
-            throw new HttpException(400, 'Validation failed', errors);
-        }
-    }
+	checkValidation = (req) => {
+		const errors = validationResult(req)
+		if (!errors.isEmpty()) {
+			throw new HttpException(400, 'Validation failed', errors);
+		}
+	}
 
-    // hash password if it exists
-    hashPassword = async (req) => {
-        if (req.body.password) {
-            req.body.password = await bcrypt.hash(req.body.password, 8);
-        }
-    }
+	// hash password if it exists
+	hashPassword = async (req) => {
+		if (req.body.password) {
+			req.body.password = await bcrypt.hash(req.body.password, 8);
+		}
+	}
 }
 
 
