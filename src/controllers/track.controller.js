@@ -46,7 +46,7 @@ class TrackController {
     const result = await TrackModel.create(req.body);
 
     if (!result) {
-      throw new HttpException(500, 'Something went wrong');
+      throw new HttpException(523, 'Something went wrong');
     }
 
     res.status(201).send({ ...req.body });
@@ -54,42 +54,27 @@ class TrackController {
 
   uploadTrack = async (req, res, next) => {
 
-    let sampleFile;
+    let gpxFile;
     let uploadPath;
-
+   
     if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).send('No files were uploaded.');
+      return res.status(422).send('Error');
     }
     // Generate unique identificator 'hashString'
     const hashString = this.generateHash();
 
-    // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-    sampleFile = req.files.sampleFile;
+    gpxFile = req.files.gpxFile;
     uploadPath = __dirname + process.env.UPLOAD_DIR + hashString + '.gpx';
 
     // Use the mv() method to place the file somewhere on your server
-    sampleFile.mv(uploadPath, function (err) {
+    gpxFile.mv(uploadPath, function (err) {
       if (err) {
         throw new HttpException(422, 'Something went wrong');
       }
 
-
-      //  res.send('File uploaded!');
       res.status(201).send({ hashString });
     });
 
-
-    // 
-    // // Add user id in body from req.currentUser 
-    // await this.addUserId(req);
-
-    // const result = await TrackModel.create(req.body);
-
-    // if (!result) {
-    //     throw new HttpException(500, 'Something went wrong');
-    // }
-
-    // res.status(201).send({ ...req.body });
   };
 
   updateTrack = async (req, res, next) => {
