@@ -4,7 +4,7 @@ const { validationResult } = require('express-validator');
 const md5 = require('md5');
 const path = require('path');
 const dotenv = require('dotenv');
-dotenv.config({ path: __dirname + '/../../.env'});
+dotenv.config({ path: __dirname + '/../../.env' });
 
 /******************************************************************************
  *                              Track Controller
@@ -54,19 +54,39 @@ class TrackController {
     };
 
     uploadTrack = async (req, res, next) => {
-        
-        // Generate unique identificator 'hashString'
-        await this.hashTitle(req);
-        // Add user id in body from req.currentUser 
-        await this.addUserId(req);
 
-        const result = await TrackModel.create(req.body);
+        let sampleFile;
+        let uploadPath;
 
-        if (!result) {
-            throw new HttpException(500, 'Something went wrong');
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).send('No files were uploaded.');
         }
 
-        res.status(201).send({ ...req.body });
+        // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+        sampleFile = req.files.sampleFile;
+        uploadPath = __dirname + process.env.UPLOAD_DIR + sampleFile.name;
+
+        // Use the mv() method to place the file somewhere on your server
+        sampleFile.mv(uploadPath, function (err) {
+            if (err)
+                return res.status(500).send(err);
+
+            res.send('File uploaded!');
+        });
+
+
+        // // Generate unique identificator 'hashString'
+        // await this.hashTitle(req);
+        // // Add user id in body from req.currentUser 
+        // await this.addUserId(req);
+
+        // const result = await TrackModel.create(req.body);
+
+        // if (!result) {
+        //     throw new HttpException(500, 'Something went wrong');
+        // }
+
+        // res.status(201).send({ ...req.body });
     };
 
     updateTrack = async (req, res, next) => {
