@@ -11,7 +11,7 @@ const fileUpload = require('express-fileupload');
 // Init express
 const app = express();
 // Init environment
-dotenv.config({ path: __dirname + '/../.env'});
+dotenv.config({ path: __dirname + '/../.env' });
 // parse requests of content-type: application/json
 // parses incoming requests with JSON payloads
 app.use(express.json());
@@ -37,10 +37,10 @@ app.use(`/tracks`, trackRouter);
 
 // 404 error
 app.use('*', (req, res, next) => {
-    console.log("res", res);
-    console.log("res", res);
-    const err = new HttpException(404, 'Endpoint Not Found');
-    next(err);
+  console.log("res", res);
+  console.log("res", res);
+  const err = new HttpException(404, 'Endpoint Not Found');
+  next(err);
 });
 
 // Error middleware
@@ -48,7 +48,7 @@ app.use(errorMiddleware);
 
 // starting the server
 app.listen(port, () =>
-    console.log(`🚀 Server running on port ${port}!`));
+  console.log(`🚀 Server running on port ${port}!`));
 
 
 module.exports = app;
