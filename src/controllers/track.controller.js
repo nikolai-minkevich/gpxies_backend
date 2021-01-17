@@ -53,6 +53,22 @@ class TrackController {
         res.status(201).send({ ...req.body });
     };
 
+    uploadTrack = async (req, res, next) => {
+        
+        // Generate unique identificator 'hashString'
+        await this.hashTitle(req);
+        // Add user id in body from req.currentUser 
+        await this.addUserId(req);
+
+        const result = await TrackModel.create(req.body);
+
+        if (!result) {
+            throw new HttpException(500, 'Something went wrong');
+        }
+
+        res.status(201).send({ ...req.body });
+    };
+
     updateTrack = async (req, res, next) => {
         this.checkValidation(req);
 
