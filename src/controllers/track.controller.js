@@ -29,6 +29,14 @@ class TrackController {
   };
 
   getTracksByUserId = async (req, res, next) => {
+    const track = await TrackModel.find({ user: req.params.id });
+    if (!track) {
+      throw new HttpException(404, 'Tracks not found');
+    }
+
+    res.send(track);
+  };
+  getTracksByUsername = async (req, res, next) => {
     const track = await TrackModel.find({ user: req.params.user });
     if (!track) {
       throw new HttpException(404, 'Tracks not found');
