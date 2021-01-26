@@ -9,6 +9,7 @@ const { createTrackSchema, updateTrackSchema } = require('../middleware/validato
 
 router.get('/', auth(), awaitHandlerFactory(trackController.getAllTracks)); // localhost:3000/api/v1/users
 router.get('/id/:hashString', auth(), awaitHandlerFactory(trackController.getTrackById)); // localhost:3000/api/v1/users/id/1
+router.get('/download/:hashString', auth(), awaitHandlerFactory(trackController.downloadTrackById)); // localhost:3000/api/v1/users/id/1
 router.get('/username/:id', auth(), awaitHandlerFactory(trackController.getTracksByUserId)); // localhost:3000/api/v1/users/usersname/julia
 router.post('/upload', auth(), awaitHandlerFactory(trackController.uploadTrack));
 router.post('/', auth(), createTrackSchema, awaitHandlerFactory(trackController.createTrack)); // localhost:3000/api/v1/users

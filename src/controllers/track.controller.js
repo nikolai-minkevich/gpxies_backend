@@ -20,12 +20,29 @@ class TrackController {
   };
 
   getTrackById = async (req, res, next) => {
-    const track = await TrackModel.findOne({ hashString: req.params.hashString });
+    const track = await TrackModel.findOne({
+      hashString: req.params.hashString,
+    });
     if (!track) {
       throw new HttpException(404, 'Track not found');
     }
-
     res.send(track);
+  };
+
+  downloadTrackById = async (req, res, next) => {
+    const track = await TrackModel.findOne({
+      hashString: req.params.hashString,
+    });
+    if (!track) {
+      throw new HttpException(404, 'Track not found');
+    }
+    const file = `${__dirname}/../../gpx/${req.params.hashString}.gpx`;
+    res.setHeader(
+      'Content-disposition',
+      `attachment; filename=track_${req.params.hashString}.gpx`
+    );
+    res.setHeader('Content-type', 'application/gpx+xml');
+    res.download(file, `track_${req.params.hashString}.gpx`);
   };
 
   getTracksByUserId = async (req, res, next) => {
@@ -48,7 +65,7 @@ class TrackController {
   createTrack = async (req, res, next) => {
     this.checkValidation(req);
 
-    // Add user id in body from req.currentUser 
+    // Add user id in body from req.currentUser
     await this.addUserId(req);
 
     const result = await TrackModel.create(req.body);
@@ -61,10 +78,9 @@ class TrackController {
   };
 
   uploadTrack = async (req, res, next) => {
-
     let gpxFile;
     let uploadPath;
-   
+
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(422).send('Error');
     }
@@ -82,7 +98,6 @@ class TrackController {
 
       res.status(201).send({ hashString });
     });
-
   };
 
   updateTrack = async (req, res, next) => {
@@ -98,8 +113,11 @@ class TrackController {
 
     const { affectedRows, changedRows, info } = result;
 
-    const message = !affectedRows ? 'User not found' :
-      affectedRows && changedRows ? 'User updated successfully' : 'Updated faild';
+    const message = !affectedRows
+      ? 'User not found'
+      : affectedRows && changedRows
+      ? 'User updated successfully'
+      : 'Updated faild';
 
     res.send({ message, info });
   };
@@ -113,18 +131,18 @@ class TrackController {
   };
 
   checkValidation = (req) => {
-    const errors = validationResult(req)
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
       throw new HttpException(400, 'Validation failed', errors);
     }
-  }
+  };
 
   // hash track title
   generateHash = () => {
     //   if (req.body.title) {
     return md5(new Date().toISOString() + Math.random().toString());
     //   }
-  }
+  };
 
   // add user id
   addUserId = async (req) => {
@@ -133,18 +151,15 @@ class TrackController {
     } else {
       throw new HttpException(401, 'Auth information is requied', errors);
     }
-  }
+  };
 
-  // Todo Add check user 
+  // Todo Add check user
   // checkUserId = async (req) => {
   //     if (req.currentUser.id)
   // }
-
 }
-
-
 
 /******************************************************************************
  *                               Export
  ******************************************************************************/
-module.exports = new TrackController;
+module.exports = new TrackController();
