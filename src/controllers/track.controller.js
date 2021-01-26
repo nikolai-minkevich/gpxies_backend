@@ -20,7 +20,7 @@ class TrackController {
   };
 
   getTrackById = async (req, res, next) => {
-    const track = await TrackModel.findOne({ id: req.params.id });
+    const track = await TrackModel.findOne({ hashString: req.params.hashString });
     if (!track) {
       throw new HttpException(404, 'Track not found');
     }
