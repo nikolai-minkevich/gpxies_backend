@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator');
 const md5 = require('md5');
 const path = require('path');
 const dotenv = require('dotenv');
+const fs = require('fs');
 dotenv.config({ path: __dirname + '/../../.env' });
 
 /******************************************************************************
@@ -30,19 +31,26 @@ class TrackController {
   };
 
   downloadTrackById = async (req, res, next) => {
+    // look for record in table
+    console.log('req.params.hashString',req.params.hashString);
     const track = await TrackModel.findOne({
       hashString: req.params.hashString,
     });
     if (!track) {
       throw new HttpException(404, 'Track not found');
     }
-    const file = `${__dirname}/../../gpx/${req.params.hashString}.gpx`;
-    res.setHeader(
-      'Content-disposition',
-      `attachment; filename=track_${req.params.hashString}.gpx`
-    );
-    res.setHeader('Content-type', 'application/gpx+xml');
-    res.download(file, `track_${req.params.hashString}.gpx`);
+    res.send(track);
+
+    // if ok, load it
+    // асинхронное чтение
+    // fs.readFile('hello.gpx', 'utf8', function (error, data) {
+    //   console.log('Асинхронное чтение файла');
+    //   // if (error) throw error;
+      
+    // });
+
+    // const file = `${__dirname}/../../gpx/${req.params.hashString}.gpx`;
+    // res.download(file, `track_${req.params.hashString}.gpx`);
   };
 
   getTracksByUserId = async (req, res, next) => {
@@ -113,11 +121,7 @@ class TrackController {
 
     const { affectedRows, changedRows, info } = result;
 
-    const message = !affectedRows
-      ? 'User not found'
-      : affectedRows && changedRows
-      ? 'User updated successfully'
-      : 'Updated faild';
+    const message = !affectedRows ? 'User not found' : affectedRows && changedRows ? 'User updated successfully' : 'Updated faild';
 
     res.send({ message, info });
   };
@@ -128,6 +132,15 @@ class TrackController {
       throw new HttpException(404, 'Track not found');
     }
     res.send('Track has been deleted');
+  };
+
+  deleteMultipleTracks = async (req, res, next) => {
+    console.log('req.body',req.body);
+    const result = await TrackModel.deleteMultiple(req.body);
+    if (!result) {
+      throw new HttpException(404, 'Tracks not found');
+    }
+    res.send('Tracks has been deleted');
   };
 
   checkValidation = (req) => {

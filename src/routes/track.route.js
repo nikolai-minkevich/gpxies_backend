@@ -14,6 +14,6 @@ router.get('/username/:id', auth(), awaitHandlerFactory(trackController.getTrack
 router.post('/upload', auth(), awaitHandlerFactory(trackController.uploadTrack));
 router.post('/', auth(), createTrackSchema, awaitHandlerFactory(trackController.createTrack)); // localhost:3000/api/v1/users
 router.patch('/id/:id', auth(), updateTrackSchema, awaitHandlerFactory(trackController.updateTrack)); // localhost:3000/api/v1/users/id/1 , using patch for partial update
-router.delete('/id/:id', auth(), awaitHandlerFactory(trackController.deleteTrack)); // localhost:3000/api/v1/users/id/1
+router.patch('/delete', auth(), awaitHandlerFactory(trackController.deleteMultipleTracks)); // localhost:3000/api/v1/users/id/1
 
 module.exports = router;
