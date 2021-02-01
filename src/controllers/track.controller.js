@@ -5,6 +5,13 @@ const md5 = require('md5');
 const path = require('path');
 const dotenv = require('dotenv');
 const fs = require('fs');
+const util = require('util');
+const GpxParser = require('../utils/GpxParser');
+///////////////////
+// var parser = require('fast-xml-parser');
+// var he = require('he');
+// var ParserXML = require("fast-xml-parser").j2xParser;
+///////////////////
 dotenv.config({ path: __dirname + '/../../.env' });
 
 /******************************************************************************
@@ -32,7 +39,7 @@ class TrackController {
 
   downloadTrackById = async (req, res, next) => {
     // look for record in table
-    console.log('req.params.hashString',req.params.hashString);
+    console.log('req.params.hashString', req.params.hashString);
     const track = await TrackModel.findOne({
       hashString: req.params.hashString,
     });
@@ -46,8 +53,84 @@ class TrackController {
     // fs.readFile('hello.gpx', 'utf8', function (error, data) {
     //   console.log('Асинхронное чтение файла');
     //   // if (error) throw error;
-      
+
     // });
+
+    // const file = `${__dirname}/../../gpx/${req.params.hashString}.gpx`;
+    // res.download(file, `track_${req.params.hashString}.gpx`);
+  };
+
+  getTrackPoints = async (req, res, next) => {
+    // look for record in table
+    console.log('req.params.hashString', req.params.hashString);
+    const track = await TrackModel.findOne({
+      hashString: req.params.hashString,
+    });
+    if (!track) {
+      throw new HttpException(404, 'Track not found');
+    }
+    const readFile = util.promisify(fs.readFile);
+
+    let xmlData = await readFile(__dirname + `/../../gpx/${req.params.hashString}_2.gpx`);
+    // console.log('result', xmlData.toString());
+    // res.send(xmlData.toString());
+    xmlData = xmlData.toString();
+
+    const gpxParser = new GpxParser();
+    let jsondata = gpxParser.loadGpx(xmlData);
+    res.send(jsondata);
+    //////////////////////////
+
+    // var options = {
+    //   attributeNamePrefix: '',
+    //   attrNodeName: 'attr', //default is 'false'
+    //   textNodeName: '#text',
+    //   ignoreAttributes: false,
+    //   ignoreNameSpace: false,
+    //   allowBooleanAttributes: false,
+    //   parseNodeValue: true,
+    //   parseAttributeValue: false,
+    //   trimValues: true,
+    //   cdataTagName: '__cdata', //default is 'false'
+    //   cdataPositionChar: '\\c',
+    //   parseTrueNumberOnly: false,
+    //   arrayMode: false, //"strict"
+    //   attrValueProcessor: (val, attrName) => he.decode(val, { isAttributeValue: true }), //default is a=>a
+    //   tagValueProcessor: (val, tagName) => he.decode(val), //default is a=>a
+    //   stopNodes: ['parse-me-as-string'],
+    // };
+
+    // if (parser.validate(xmlData) === true) {
+    //   //optional (it'll return an object in case it's not valid)
+    //   var jsonObj = parser.parse(xmlData, options);
+    // }
+
+    // console.log('jsonObj',jsonObj);
+
+    //////////
+    // var defaultOptions = {
+    //   attributeNamePrefix : "",
+    //   attrNodeName: "attr", //default is false
+    //   textNodeName : "#text",
+    //   ignoreAttributes : false,
+    //   cdataTagName: "__cdata", //default is false
+    //   cdataPositionChar: "\\c",
+    //   format: false,
+    //   indentBy: "  ",
+    //   supressEmptyNode: false,
+    //   //tagValueProcessor: a=> he.encode(a, { useNamedReferences: true}),// default is a=>a
+    //   //attrValueProcessor: a=> he.encode(a, {isAttributeValue: isAttribute, useNamedReferences: true})// default is a=>a
+    // };
+    // var xparser = new ParserXML(defaultOptions);
+    // var xml = xparser.parse(jsonObj);
+
+    // console.log(xml);
+    //     res.send(xml)
+
+    ///////////////////////////
+
+    // if ok, load it
+    // асинхронное чтение
 
     // const file = `${__dirname}/../../gpx/${req.params.hashString}.gpx`;
     // res.download(file, `track_${req.params.hashString}.gpx`);
@@ -135,7 +218,7 @@ class TrackController {
   };
 
   deleteMultipleTracks = async (req, res, next) => {
-    console.log('req.body',req.body);
+    console.log('req.body', req.body);
     const result = await TrackModel.deleteMultiple(req.body);
     if (!result) {
       throw new HttpException(404, 'Tracks not found');
