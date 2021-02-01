@@ -62,7 +62,6 @@ class TrackController {
 
   getTrackPoints = async (req, res, next) => {
     // look for record in table
-    console.log('req.params.hashString', req.params.hashString);
     const track = await TrackModel.findOne({
       hashString: req.params.hashString,
     });
@@ -71,14 +70,11 @@ class TrackController {
     }
     const readFile = util.promisify(fs.readFile);
 
-    let xmlData = await readFile(__dirname + `/../../gpx/${req.params.hashString}_2.gpx`);
-
-    xmlData = xmlData.toString();
+    let xmlData = await readFile(__dirname + `/../../gpx/${req.params.hashString}.gpx`);
 
     const gpxParser = new GpxParser();
-    let jsondata = gpxParser.loadGpx(xmlData);
-    console.log(jsondata);
-    jsondata = gpxParser.prepare();
+    gpxParser.loadGpx(xmlData.toString());
+    const jsondata = gpxParser.prepare();
     res.send(jsondata);
   };
 
