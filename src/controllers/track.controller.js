@@ -46,18 +46,9 @@ class TrackController {
     if (!track) {
       throw new HttpException(404, 'Track not found');
     }
-    res.send(track);
 
-    // if ok, load it
-    // асинхронное чтение
-    // fs.readFile('hello.gpx', 'utf8', function (error, data) {
-    //   console.log('Асинхронное чтение файла');
-    //   // if (error) throw error;
-
-    // });
-
-    // const file = `${__dirname}/../../gpx/${req.params.hashString}.gpx`;
-    // res.download(file, `track_${req.params.hashString}.gpx`);
+    const file = `${__dirname}/../../gpx/${req.params.hashString}.gpx`;
+    res.download(file, `track_${req.params.hashString}.gpx`);
   };
 
   getTrackPoints = async (req, res, next) => {
