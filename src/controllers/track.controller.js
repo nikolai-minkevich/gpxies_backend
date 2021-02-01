@@ -46,23 +46,13 @@ class TrackController {
     if (!track) {
       throw new HttpException(404, 'Track not found');
     }
-    res.send(track);
 
-    // if ok, load it
-    // асинхронное чтение
-    // fs.readFile('hello.gpx', 'utf8', function (error, data) {
-    //   console.log('Асинхронное чтение файла');
-    //   // if (error) throw error;
-
-    // });
-
-    // const file = `${__dirname}/../../gpx/${req.params.hashString}.gpx`;
-    // res.download(file, `track_${req.params.hashString}.gpx`);
+    const file = `${__dirname}/../../gpx/${req.params.hashString}.gpx`;
+    res.download(file, `track_${req.params.hashString}.gpx`);
   };
 
   getTrackPoints = async (req, res, next) => {
     // look for record in table
-    console.log('req.params.hashString', req.params.hashString);
     const track = await TrackModel.findOne({
       hashString: req.params.hashString,
     });
@@ -71,14 +61,11 @@ class TrackController {
     }
     const readFile = util.promisify(fs.readFile);
 
-    let xmlData = await readFile(__dirname + `/../../gpx/${req.params.hashString}_2.gpx`);
-
-    xmlData = xmlData.toString();
+    let xmlData = await readFile(__dirname + `/../../gpx/${req.params.hashString}.gpx`);
 
     const gpxParser = new GpxParser();
-    let jsondata = gpxParser.loadGpx(xmlData);
-    console.log(jsondata);
-    jsondata = gpxParser.prepare();
+    gpxParser.loadGpx(xmlData.toString());
+    const jsondata = gpxParser.prepare();
     res.send(jsondata);
   };
 

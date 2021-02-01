@@ -109,6 +109,7 @@ class GpxParser {
   // Good explanation: https://medium.com/@congyuzhou/%D1%80%D0%B0%D1%81%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D0%B5-%D0%BC%D0%B5%D0%B6%D0%B4%D1%83-%D0%B4%D0%B2%D1%83%D0%BC%D1%8F-%D1%82%D0%BE%D1%87%D0%BA%D0%B0%D0%BC%D0%B8-%D0%BD%D0%B0-%D0%BF%D0%BE%D0%B2%D0%B5%D1%80%D1%85%D0%BD%D0%BE%D1%81%D1%82%D0%B8-%D0%B7%D0%B5%D0%BC%D0%BB%D0%B8-a398352bfbde
   calculateDistance(lat1, lon1, lat2, lon2) {
     if (lat1 == lat2 && lon1 == lon2) return 0;
+    // Average radius of Earth
     const r = 6371000;
     const f1 = this.degreeToRadian(lat1);
     const f2 = this.degreeToRadian(lat2);
