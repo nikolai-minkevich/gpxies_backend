@@ -115,38 +115,26 @@ class TrackController {
   };
 
   uploadTrack = async (req, res, next) => {
-    let gpxFile;
-    let uploadPath;
-
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(422).send('Error');
     }
     // Generate unique identificator 'hashString'
     const hashString = this.generateHash();
+    const uploadPath = __dirname + process.env.UPLOAD_DIR + hashString + '.gpx';
 
-    gpxFile = req.files.gpxFile.data.toString();
+    // Get data from uploaded file
+    const gpxFile = req.files.gpxFile.data.toString();
 
-    const readFile = util.promisify(fs.readFile);
-
-    let xmlData = gpxFile;
-
-    console.log(xmlData);
-
-    xmlData = xmlData.toString();
-
+    // Create
     const gpxParser = new GpxParser();
-    let jsondata = gpxParser.loadGpx(xmlData);
-    console.log(jsondata);
-    jsondata = gpxParser.prepare();
-    //ok
+    gpxParser.loadGpx(gpxFile);
+    gpxParser.prepare();
     const gpxOutput = gpxParser.createXmlGpx();
-
-    uploadPath = __dirname + process.env.UPLOAD_DIR + hashString + '.gpx';
 
     const writeFile = util.promisify(fs.writeFile);
     await writeFile(uploadPath, gpxOutput);
 
-    res.status(201).send({ hashString });
+    res.status(201).send({ hashString, ...gpxParser.getMetadata() });
   };
 
   updateTrack = async (req, res, next) => {

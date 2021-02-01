@@ -45,7 +45,6 @@ class GpxParser {
   }
   createXmlGpx() {
     const jsonToGpxParser = new j2xParser(this.optionsJSON2GPX);
-    console.log(jsonToGpxParser);
     const xml = jsonToGpxParser.parse(this.jsonObj);
     return xml;
   }
@@ -53,7 +52,7 @@ class GpxParser {
     return this.jsonObj;
   }
   getMetadata() {
-    return { ...this.distance, ...this.points };
+    return { distance: this.distance, points: this.points };
   }
   prepare(creator = 'Gpxies.ru', date = new Date().toISOString(), title = 'New track ' + date) {
     // Header
