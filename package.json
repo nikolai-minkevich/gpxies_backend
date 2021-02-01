@@ -17,6 +17,8 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
     "express-validator": "^6.9.2",
+    "fast-xml-parser": "^3.17.6",
+    "he": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "md5": "^2.3.0",
     "mysql2": "^2.2.5"
