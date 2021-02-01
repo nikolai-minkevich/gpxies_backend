@@ -67,11 +67,15 @@ class GpxParser {
       if (!Array.isArray(trk.trkseg)) {
         trk.trkseg = new Array(trk.trkseg);
       }
-      trk.trkseg.forEach((trkpt) => {
-        delete trkpt.time;
-        delete trkpt.ele;
-        delete trkpt.fix;
-        delete trkpt.sat;
+      trk.trkseg.forEach((trkseg) => {
+        if (!Array.isArray(trkseg.trkpt)) {
+          trkseg.trkpt = new Array(trkseg.trkpt);
+        }
+        trkseg.trkpt.forEach((trkpt) => {
+          Object.keys(trkpt).map((node) => {
+            if (node !== 'attr') delete trkpt[node];
+          });
+        });
       });
     });
     return this.jsonObj;
