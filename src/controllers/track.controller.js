@@ -78,62 +78,9 @@ class TrackController {
 
     const gpxParser = new GpxParser();
     let jsondata = gpxParser.loadGpx(xmlData);
+    console.log(jsondata);
+    jsondata = gpxParser.generateHeader();
     res.send(jsondata);
-    //////////////////////////
-
-    // var options = {
-    //   attributeNamePrefix: '',
-    //   attrNodeName: 'attr', //default is 'false'
-    //   textNodeName: '#text',
-    //   ignoreAttributes: false,
-    //   ignoreNameSpace: false,
-    //   allowBooleanAttributes: false,
-    //   parseNodeValue: true,
-    //   parseAttributeValue: false,
-    //   trimValues: true,
-    //   cdataTagName: '__cdata', //default is 'false'
-    //   cdataPositionChar: '\\c',
-    //   parseTrueNumberOnly: false,
-    //   arrayMode: false, //"strict"
-    //   attrValueProcessor: (val, attrName) => he.decode(val, { isAttributeValue: true }), //default is a=>a
-    //   tagValueProcessor: (val, tagName) => he.decode(val), //default is a=>a
-    //   stopNodes: ['parse-me-as-string'],
-    // };
-
-    // if (parser.validate(xmlData) === true) {
-    //   //optional (it'll return an object in case it's not valid)
-    //   var jsonObj = parser.parse(xmlData, options);
-    // }
-
-    // console.log('jsonObj',jsonObj);
-
-    //////////
-    // var defaultOptions = {
-    //   attributeNamePrefix : "",
-    //   attrNodeName: "attr", //default is false
-    //   textNodeName : "#text",
-    //   ignoreAttributes : false,
-    //   cdataTagName: "__cdata", //default is false
-    //   cdataPositionChar: "\\c",
-    //   format: false,
-    //   indentBy: "  ",
-    //   supressEmptyNode: false,
-    //   //tagValueProcessor: a=> he.encode(a, { useNamedReferences: true}),// default is a=>a
-    //   //attrValueProcessor: a=> he.encode(a, {isAttributeValue: isAttribute, useNamedReferences: true})// default is a=>a
-    // };
-    // var xparser = new ParserXML(defaultOptions);
-    // var xml = xparser.parse(jsonObj);
-
-    // console.log(xml);
-    //     res.send(xml)
-
-    ///////////////////////////
-
-    // if ok, load it
-    // асинхронное чтение
-
-    // const file = `${__dirname}/../../gpx/${req.params.hashString}.gpx`;
-    // res.download(file, `track_${req.params.hashString}.gpx`);
   };
 
   getTracksByUserId = async (req, res, next) => {

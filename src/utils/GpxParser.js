@@ -48,6 +48,34 @@ class GpxParser {
     const xml = j2xParser.parse(this.jsonObj);
     return xml;
   }
+  getJson() {
+    return this.jsonObj;
+  }
+  generateHeader(creator = 'Gpxies.ru', date = new Date().toISOString(), title = 'New track ' + date, distance = '0') {
+    this.jsonObj.gpx.attr.creator = creator;
+    this.jsonObj.gpx.metadata.link.attr.href = 'https://gpxies.ru';
+    this.jsonObj.gpx.metadata.link.text = 'Gpxies.ru';
+    this.jsonObj.gpx.metadata.time = date;
+
+    if (!Array.isArray(this.jsonObj.gpx.trk)) {
+      this.jsonObj.gpx.trk = new Array(this.jsonObj.gpx.trk);
+    }
+    this.jsonObj.gpx.trk.forEach((trk) => {
+      trk.name = title;
+      trk.extensions['gpxtrkx:TrackStatsExtension']['gpxtrkx:Distance'] = distance;
+      delete trk.extensions['gpxx:TrackExtension'];
+      if (!Array.isArray(trk.trkseg)) {
+        trk.trkseg = new Array(trk.trkseg);
+      }
+      trk.trkseg.forEach((trkpt) => {
+        delete trkpt.time;
+        delete trkpt.ele;
+        delete trkpt.fix;
+        delete trkpt.sat;
+      });
+    });
+    return this.jsonObj;
+  }
 }
 
 module.exports = GpxParser;
