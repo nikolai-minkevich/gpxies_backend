@@ -72,14 +72,13 @@ class TrackController {
     const readFile = util.promisify(fs.readFile);
 
     let xmlData = await readFile(__dirname + `/../../gpx/${req.params.hashString}_2.gpx`);
-    // console.log('result', xmlData.toString());
-    // res.send(xmlData.toString());
+
     xmlData = xmlData.toString();
 
     const gpxParser = new GpxParser();
     let jsondata = gpxParser.loadGpx(xmlData);
     console.log(jsondata);
-    jsondata = gpxParser.generateHeader();
+    jsondata = gpxParser.prepare();
     res.send(jsondata);
   };
 
@@ -125,17 +124,29 @@ class TrackController {
     // Generate unique identificator 'hashString'
     const hashString = this.generateHash();
 
-    gpxFile = req.files.gpxFile;
+    gpxFile = req.files.gpxFile.data.toString();
+
+    const readFile = util.promisify(fs.readFile);
+
+    let xmlData = gpxFile;
+
+    console.log(xmlData);
+
+    xmlData = xmlData.toString();
+
+    const gpxParser = new GpxParser();
+    let jsondata = gpxParser.loadGpx(xmlData);
+    console.log(jsondata);
+    jsondata = gpxParser.prepare();
+    //ok
+    const gpxOutput = gpxParser.createXmlGpx();
+
     uploadPath = __dirname + process.env.UPLOAD_DIR + hashString + '.gpx';
 
-    // Use the mv() method to place the file somewhere on your server
-    gpxFile.mv(uploadPath, function (err) {
-      if (err) {
-        throw new HttpException(422, 'Something went wrong');
-      }
+    const writeFile = util.promisify(fs.writeFile);
+    await writeFile(uploadPath, gpxOutput);
 
-      res.status(201).send({ hashString });
-    });
+    res.status(201).send({ hashString });
   };
 
   updateTrack = async (req, res, next) => {
