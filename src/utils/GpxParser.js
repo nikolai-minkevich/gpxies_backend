@@ -57,9 +57,11 @@ class GpxParser {
   prepare(creator = 'Gpxies.ru', date = new Date().toISOString(), title = 'New track ' + date) {
     // Header
     this.jsonObj.gpx.attr.creator = creator;
-    this.jsonObj.gpx.metadata.link.attr.href = 'https://gpxies.ru';
+    if (this.jsonObj.gpx.metadata){
+       this.jsonObj.gpx.metadata.link.attr.href = 'https://gpxies.ru';
     this.jsonObj.gpx.metadata.link.text = 'Gpxies.ru';
     this.jsonObj.gpx.metadata.time = date;
+    }
     // trk -> trkseg -> trkpt
     let distance = 0;
     let startLat = null;
@@ -70,7 +72,10 @@ class GpxParser {
     }
     this.jsonObj.gpx.trk.forEach((trk) => {
       trk.name = title;
-      delete trk.extensions['gpxx:TrackExtension'];
+      if (trk.extensions && trk.extensions['gpxx:TrackExtension']) {
+        delete trk.extensions['gpxx:TrackExtension'];
+      } 
+
       if (!Array.isArray(trk.trkseg)) {
         trk.trkseg = new Array(trk.trkseg);
       }
@@ -99,7 +104,10 @@ class GpxParser {
           });
         });
       });
-      trk.extensions['gpxtrkx:TrackStatsExtension']['gpxtrkx:Distance'] = distance;
+      if (trk.extensions && trk.extensions['gpxx:TrackStatsExtension']) {
+        trk.extensions['gpxtrkx:TrackStatsExtension']['gpxtrkx:Distance'] = distance;
+      }
+      
       this.distance = distance;
       this.points = points;
     });
